@@ -3,3 +3,4 @@ yolov10n.pt
 myenv/
 .DS_Store
 yolo_results.json
+__pycache__/
