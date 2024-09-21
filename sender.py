@@ -1,6 +1,11 @@
 import asyncio
 import websockets
 import json
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--address", help="Server address", default="localhost")
+parser.add_argument("--port", help="Server port", type=int, default=8765)  # ポートもオプションで指定できるように
 
 async def time_server(websocket, path):
     prevData = ""
@@ -24,7 +29,11 @@ async def time_server(websocket, path):
         # 10ms待機してから再度ファイルを読み取る
         await asyncio.sleep(0.01)
 
-start_server = websockets.serve(time_server, "localhost", 8765)
+args = parser.parse_args()
+address = args.address
+port = args.port
+
+start_server = websockets.serve(time_server, address, port)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
