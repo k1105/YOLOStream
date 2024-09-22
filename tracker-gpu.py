@@ -2,9 +2,9 @@ import cv2
 import json
 import argparse
 from ultralytics import YOLO
-from relation_calculator import update_relation
-from bbox import Bbox
-from person import Person
+from lib.relation_calculator import update_relation
+from classes.bbox import Bbox
+from classes.person import Person
 
 # argparseの設定
 parser = argparse.ArgumentParser()
