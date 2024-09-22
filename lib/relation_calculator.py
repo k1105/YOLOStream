@@ -1,4 +1,4 @@
-from conflict_resolver import resolve_conflicts
+from lib.conflict_resolver import resolve_conflicts
 
 def update_relation(people, bboxes, threshold):
     relation = [[] for _ in range(len(bboxes))]

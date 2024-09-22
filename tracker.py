@@ -4,9 +4,9 @@ import threading
 import time
 import argparse
 from ultralytics import YOLO
-from relation_calculator import update_relation
-from bbox import Bbox
-from person import Person
+from lib.relation_calculator import update_relation
+from classes.bbox import Bbox
+from classes.person import Person
 
 # YOLOモデルの読み込み
 model = YOLO("yolov10n.pt")

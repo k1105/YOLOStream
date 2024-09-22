@@ -1,5 +1,5 @@
 import time
-from bbox import Bbox
+from classes.bbox import Bbox
 
 class Person:
     def __init__(self, id, speed, bbox: Bbox, fps=60, smoothing_factor=0.9):
