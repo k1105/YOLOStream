@@ -3,6 +3,8 @@ import json
 import argparse
 from ultralytics import YOLO
 from lib.relation_calculator import update_relation
+from lib.update_people import update_people
+
 from classes.bbox import Bbox
 from classes.person import Person
 
@@ -27,25 +29,25 @@ threshold = 200  # 距離の閾値（必要に応じて調整）
 
 output_file = "yolo_results.json"
 
-def update_people(relation, people, bboxes, peopleCounts):
-    activePersonIds = set([entry['id'] for sublist in relation for entry in sublist])
-    people = [person for person in people if person.id in activePersonIds]
+# def update_people(relation, people, bboxes, peopleCounts):
+#     activePersonIds = set([entry['id'] for sublist in relation for entry in sublist])
+#     people = [person for person in people if person.id in activePersonIds]
 
-    for i in range(len(relation)):
-        if len(relation[i]) == 0:
-            # 新しい人物がフレームイン
-            new_person = Person(peopleCounts, {'x': 0, 'y': 0}, bboxes[i])
-            people.append(new_person)
-            peopleCounts += 1
-        elif len(relation[i]) == 1:
-            # 既存の人物を更新
-            person = next((p for p in people if p.id == relation[i][0]['id']), None)
-            if person:
-                person.update_bbox(bboxes[i])
-            else:
-                print("更新対象の人物が見つかりません")
+#     for i in range(len(relation)):
+#         if len(relation[i]) == 0:
+#             # 新しい人物がフレームイン
+#             new_person = Person(peopleCounts, {'x': 0, 'y': 0}, bboxes[i])
+#             people.append(new_person)
+#             peopleCounts += 1
+#         elif len(relation[i]) == 1:
+#             # 既存の人物を更新
+#             person = next((p for p in people if p.id == relation[i][0]['id']), None)
+#             if person:
+#                 person.update_bbox(bboxes[i])
+#             else:
+#                 print("更新対象の人物が見つかりません")
 
-    return people, peopleCounts
+#     return people, peopleCounts
 
 while True:
     ret, frame = cap.read()
@@ -69,7 +71,7 @@ while True:
 
     # 人物とバウンディングボックスの関係を更新
     relation = update_relation(people, bboxes, threshold)
-    people, peopleCounts = update_people(relation, people, bboxes, peopleCounts)
+    people, peopleCounts, bbox_buffer, bufferedBboxCount = update_people(relation, people, bboxes, bbox_buffer, peopleCounts, bufferedBboxCount)
 
     # JSONファイルへの書き込み
     json_data = [person.to_dict() for person in people]
