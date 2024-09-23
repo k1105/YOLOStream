@@ -18,6 +18,8 @@ model = YOLO("yolov10b.pt").to("cuda")
 
 # カメラの初期化
 cap = cv2.VideoCapture(0)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 print(f"カメラの解像度: {width}x{height}")
