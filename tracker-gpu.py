@@ -22,21 +22,21 @@ print(f"カメラの解像度: {width}x{height}")
 
 people = []
 bboxes = []
-personId = 0
+peopleCounts = 0
 threshold = 200  # 距離の閾値（必要に応じて調整）
 
 output_file = "yolo_results.json"
 
-def update_people(relation, people, bboxes, personId):
+def update_people(relation, people, bboxes, peopleCounts):
     activePersonIds = set([entry['id'] for sublist in relation for entry in sublist])
     people = [person for person in people if person.id in activePersonIds]
 
     for i in range(len(relation)):
         if len(relation[i]) == 0:
             # 新しい人物がフレームイン
-            new_person = Person(personId, {'x': 0, 'y': 0}, bboxes[i])
+            new_person = Person(peopleCounts, {'x': 0, 'y': 0}, bboxes[i])
             people.append(new_person)
-            personId += 1
+            peopleCounts += 1
         elif len(relation[i]) == 1:
             # 既存の人物を更新
             person = next((p for p in people if p.id == relation[i][0]['id']), None)
@@ -45,7 +45,7 @@ def update_people(relation, people, bboxes, personId):
             else:
                 print("更新対象の人物が見つかりません")
 
-    return people, personId
+    return people, peopleCounts
 
 while True:
     ret, frame = cap.read()
@@ -69,7 +69,7 @@ while True:
 
     # 人物とバウンディングボックスの関係を更新
     relation = update_relation(people, bboxes, threshold)
-    people, personId = update_people(relation, people, bboxes, personId)
+    people, peopleCounts = update_people(relation, people, bboxes, peopleCounts)
 
     # JSONファイルへの書き込み
     json_data = [person.to_dict() for person in people]
