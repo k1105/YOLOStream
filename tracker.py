@@ -1,7 +1,6 @@
 import cv2
 import json
 import threading
-import time
 import argparse
 from ultralytics import YOLO
 from lib.relation_calculator import update_relation
@@ -29,26 +28,6 @@ bbox_buffer = {}
 bufferedBboxCount = 0  # バッファのBboxに一意なIDを付与するカウンター
 
 output_file = "yolo_results.json"
-
-# def update_people(relation, people, bboxes, peopleCounts):
-#     activePersonIds = set([entry['id'] for sublist in relation for entry in sublist])
-#     people = [person for person in people if person.id in activePersonIds]
-
-#     for i in range(len(relation)):
-#         if len(relation[i]) == 0:
-#             # 新しい人物がフレームイン
-#             new_person = Person(peopleCounts, {'x': 0, 'y': 0}, bboxes[i])
-#             people.append(new_person)
-#             peopleCounts += 1
-#         elif len(relation[i]) == 1:
-#             # 既存の人物を更新
-#             person = next((p for p in people if p.id == relation[i][0]['id']), None)
-#             if person:
-#                 person.update_bbox(bboxes[i])
-#             else:
-#                 print("更新対象の人物が見つかりません")
-
-#     return people, peopleCounts
 
 # YOLOの推論を別スレッドで実行
 def yolo_detection(frame, results_container):
