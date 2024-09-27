@@ -15,7 +15,7 @@ def get_audio_file_with_extension(audio_filename: str) -> str:
     # 音声ファイルのディレクトリ
     audio_dir = "audio"
     # ファイル名に拡張子を追加
-    audio_file = f"{audio_filename}.m4a"
+    audio_file = f"{audio_filename}.mp3"
     # OSに依存しない形でパスを生成
     return os.path.join(audio_dir, audio_file)
 
