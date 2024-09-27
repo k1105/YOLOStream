@@ -5,7 +5,6 @@ import argparse
 from ultralytics import YOLO
 from lib.relation_calculator import update_relation
 from classes.bbox import Bbox
-from classes.person import Person
 from lib.update_people import update_people
 
 # YOLOモデルの読み込み

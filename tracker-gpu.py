@@ -6,7 +6,6 @@ from lib.relation_calculator import update_relation
 from lib.update_people import update_people
 
 from classes.bbox import Bbox
-from classes.person import Person
 
 # argparseの設定
 parser = argparse.ArgumentParser()
