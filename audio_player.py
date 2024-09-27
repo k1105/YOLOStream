@@ -10,14 +10,21 @@ import os
 parser = argparse.ArgumentParser()
 parser.add_argument("--address", help="Server address", default="localhost")
 
-# 拡張子を追加する関数
+# 拡張子を追加し、ファイルパスを生成する関数
 def get_audio_file_with_extension(audio_filename: str) -> str:
     # 音声ファイルのディレクトリ
     audio_dir = "audio"
-    # ファイル名に拡張子を追加
-    audio_file = f"{audio_filename}.mp3"
-    # OSに依存しない形でパスを生成
-    return os.path.join(audio_dir, audio_file)
+    
+    # "prefix_filename" 形式のデータを分割して prefix と filename に分ける
+    try:
+        prefix, filename = audio_filename.split("_")
+    except ValueError:
+        print(f"Invalid audio filename format: {audio_filename}")
+        return None
+
+    # サブフォルダ内のファイル名に拡張子を追加し、OSに依存しない形でパスを生成
+    audio_file = f"{filename}.mp3"  # .mp3 拡張子を使用
+    return os.path.join(audio_dir, prefix, audio_file)  # パス: audio/prefix/filename.mp3
 
 # 音声再生を別スレッドで行う関数
 def play_audio_in_thread(audio_file: str):
@@ -31,9 +38,12 @@ async def handle_audio(websocket, path):
         data = json.loads(message)
         if 'audio' in data:
             audio_file = get_audio_file_with_extension(data['audio'])
-            print(f"Received request to play: {audio_file}")
-            # スレッドを使って音声を再生
-            threading.Thread(target=play_audio_in_thread, args=(audio_file,), daemon=True).start()
+            if audio_file and os.path.exists(audio_file):  # ファイルが存在するか確認
+                print(f"Playing audio: {audio_file}")
+                # スレッドを使って音声を再生
+                threading.Thread(target=play_audio_in_thread, args=(audio_file,), daemon=True).start()
+            else:
+                print(f"Audio file not found: {audio_file}")
 
 args = parser.parse_args()
 address = args.address
