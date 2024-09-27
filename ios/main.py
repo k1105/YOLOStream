@@ -17,9 +17,13 @@ def run_scripts(address, port, mirrored):
     sender_cmd = [venv, "sender.py", "--address", address, "--port", str(port)]
     sender_process = subprocess.Popen(sender_cmd)
 
+    audio_player_cmd = [venv, "audio_player.py", "--address", address]
+    audio_player_process = subprocess.Popen(audio_player_cmd)
+
     # 両方のプロセスが終了するまで待機
     tracker_process.wait()
     sender_process.wait()
+    audio_player_process.wait()
 
 if __name__ == "__main__":
     # コマンドライン引数のパーサーを設定
