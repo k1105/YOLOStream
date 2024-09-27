@@ -4,6 +4,7 @@ import json
 import threading  # スレッドを使って非同期に音声を再生
 from playsound import playsound
 import argparse
+import os
 
 # argparseの設定
 parser = argparse.ArgumentParser()
@@ -11,8 +12,12 @@ parser.add_argument("--address", help="Server address", default="localhost")
 
 # 拡張子を追加する関数
 def get_audio_file_with_extension(audio_filename: str) -> str:
-    # ここで拡張子を指定（必要に応じて変更可能）
-    return f"audio/{audio_filename}.m4a"
+    # 音声ファイルのディレクトリ
+    audio_dir = "audio"
+    # ファイル名に拡張子を追加
+    audio_file = f"{audio_filename}.m4a"
+    # OSに依存しない形でパスを生成
+    return os.path.join(audio_dir, audio_file)
 
 # 音声再生を別スレッドで行う関数
 def play_audio_in_thread(audio_file: str):
