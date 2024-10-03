@@ -36,7 +36,7 @@ def update_people(relation, people, bboxes, bbox_buffer, peopleCounts, bufferedB
             # 一定回数フレームで確認されたら新規のpersonを作成
             for key, buffered_data in bbox_buffer.items():
                 if buffered_data['count'] >= min_frames_for_new_person:
-                    new_person = Person(peopleCounts, {'x': 0, 'y': 0}, buffered_data['bbox'], CharData("k", 0, 0, 1))
+                    new_person = Person(peopleCounts, {'x': 0, 'y': 0}, buffered_data['bbox'], CharData("k", 0, 0, 1), "walking")
                     people.append(new_person)
                     peopleCounts += 1
                     del bbox_buffer[key]

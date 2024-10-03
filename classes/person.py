@@ -3,7 +3,7 @@ from classes.bbox import Bbox
 from classes.char_data import CharData
 
 class Person:
-    def __init__(self, id, speed, bbox: Bbox, displayCharacter: CharData):
+    def __init__(self, id, speed, bbox: Bbox, displayCharacter: CharData, movingStatus):
         """
         id: 人物を一意に識別するID
         speed: {'x': x方向の速度, 'y': y方向の速度} 形式の速度
@@ -18,6 +18,7 @@ class Person:
         self.last_update_time = time.time()  # 最後に更新された時間を保存
         self.unit_time = 1.0 
         self.displayCharacter = displayCharacter
+        self.movingStatus = movingStatus
         
     def update_bbox(self, new_bbox: Bbox):
         current_time = time.time()
@@ -39,5 +40,6 @@ class Person:
             'id': self.id,
             'speed': self.speed,
             'bbox': self.bbox.to_dict(),
-            'displayCharacter': self.displayCharacter.to_dict()
+            'displayCharacter': self.displayCharacter.to_dict(),
+            'movingStatus': self.movingStatus
         }
