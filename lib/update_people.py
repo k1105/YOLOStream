@@ -45,6 +45,7 @@ def update_people(relation, people, bboxes, bbox_buffer, peopleCounts, bufferedB
             person = next((p for p in people if p.id == relation[i][0]['id']), None)
             if person:
                 person.update_bbox(bboxes[i])
+                person.update_moving_status(200, 200)
 
     # 古いバッファをクリア
     bbox_buffer = {key: val for key, val in bbox_buffer.items() if val['frame_count'] < max_frame_age or val['count'] >= min_frames_for_new_person}
