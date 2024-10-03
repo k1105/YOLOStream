@@ -1,4 +1,5 @@
 from classes.person import Person
+from classes.char_data import CharData
 
 def update_people(relation, people, bboxes, bbox_buffer, peopleCounts, bufferedBboxCount, min_frames_for_new_person=3, max_frame_age=10, max_lost_frames=3):
     activePersonIds = set([entry['id'] for sublist in relation for entry in sublist])
@@ -35,8 +36,7 @@ def update_people(relation, people, bboxes, bbox_buffer, peopleCounts, bufferedB
             # 一定回数フレームで確認されたら新規のpersonを作成
             for key, buffered_data in bbox_buffer.items():
                 if buffered_data['count'] >= min_frames_for_new_person:
-                    print("hogehoge")
-                    new_person = Person(peopleCounts, {'x': 0, 'y': 0}, buffered_data['bbox'])
+                    new_person = Person(peopleCounts, {'x': 0, 'y': 0}, buffered_data['bbox'], CharData("k", 0, 0, 1))
                     people.append(new_person)
                     peopleCounts += 1
                     del bbox_buffer[key]
