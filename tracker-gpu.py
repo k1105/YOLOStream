@@ -13,7 +13,7 @@ parser.add_argument("--mirrored", help="optional", action="store_true")
 arg = parser.parse_args()
 
 # YOLOモデルの読み込み（GPUを使用）
-model = YOLO("yolov10b.pt").to("cuda")
+model = YOLO("yolo11x.pt").to("cuda")
 
 # カメラの初期化
 cap = cv2.VideoCapture(0)

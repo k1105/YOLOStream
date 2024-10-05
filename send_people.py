@@ -16,7 +16,7 @@ async def time_server(websocket, path):
 
             if data != prevData:
                 await websocket.send(json.dumps(data))
-                print(f"Sent data: {data}")
+                print(f"SENT DATA")
 
         except FileNotFoundError:
             print("people_results.json not found.")
