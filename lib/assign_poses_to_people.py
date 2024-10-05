@@ -2,11 +2,6 @@ import numpy as np
 from classes.pose import Pose
 
 def assign_poses_to_people(people, poses):
-    """
-    人物とポーズの紐付けを行う関数
-    people: Personオブジェクトのリスト
-    poses: ポーズ情報のリスト
-    """
     assigned_poses = []  # 既に紐付けられたposeを管理
 
     for person in people:
@@ -14,9 +9,13 @@ def assign_poses_to_people(people, poses):
         closest_pose = None
         closest_distance = float('inf')
 
-        for pose_data in poses:
-            # Poseオブジェクトの重心を計算
-            pose = Pose(pose_data["keypoints"], pose_data["confidence"])
+        # keypoints の構造に基づき、正しくアクセス
+        for person_index in range(len(poses[0]["keypoints"])):
+            keypoints = poses[0]["keypoints"][person_index]  # 各人物のキーポイント取得
+            confidence = poses[0]["confidence"][person_index]  # 各人物のconfidence取得
+
+            # Pose オブジェクトを作成
+            pose = Pose(keypoints, confidence)
             pose_center = pose.calculate_center()
 
             if pose_center is None:
