@@ -13,7 +13,8 @@ from lib.get_audio_file_with_extention import get_audio_file_with_extension
 from lib.play_audio_in_thread import play_audio_in_thread
 
 # YOLOモデルの読み込み
-model = YOLO("yolo11n.pt")
+bbox_model = YOLO("yolo11n.pt")
+pose_model = YOLO("yolo11n-pose.pt")
 
 # カメラの初期化
 cap = cv2.VideoCapture(0)
@@ -27,11 +28,12 @@ parser.add_argument("--mirrored", help="optional", action="store_true")
 people = []
 bboxes = []
 peopleCounts = 0
-threshold = 200  # 距離の閾値（必要に応じて調整）
+threshold = 200
 bbox_buffer = {}
-bufferedBboxCount = 0  # バッファのBboxに一意なIDを付与するカウンター
+bufferedBboxCount = 0
 
-output_file = "yolo_results.json"
+people_output_file = "people_results.json"
+pose_output_file = "pose_results.json"
 
 # pygameの初期化
 pygame.mixer.init()
@@ -41,54 +43,77 @@ def yolo_detection(frame, results_container):
     arg = parser.parse_args()
     if arg.mirrored:
         frame = cv2.flip(frame, 1)
-    results = model(frame)
-    results_container['results'] = results
+    # 物体検出モデルで推論
+    bbox_results = bbox_model(frame)
+    # ポーズ推定モデルで推論
+    pose_results = pose_model(frame)
+    
+    results_container['bbox_results'] = bbox_results
+    results_container['pose_results'] = pose_results
 
 while True:
     ret, frame = cap.read()
     if not ret:
         break
 
-    # YOLOによる人物検出のスレッドを作成
     results_container = {}
     yolo_thread = threading.Thread(target=yolo_detection, args=(frame, results_container))
     yolo_thread.start()
 
-    # YOLOの推論が終わるまでの間に他の処理を行う
-    relation = update_relation(people, bboxes, threshold)  # bboxesが空でも処理する
+    relation = update_relation(people, bboxes, threshold)
     people, peopleCounts, bbox_buffer, bufferedBboxCount = update_people(relation, people, bboxes, bbox_buffer, peopleCounts, bufferedBboxCount)
-    # people, peopleCounts = update_people(relation, people, bboxes, peopleCounts)
     
     for person in people:
-        if person.characterUpdated:        
+        if person.characterUpdated:
             audio_file = get_audio_file_with_extension(person.displayCharacter.name)
-            volume = 1  # 0〜1の範囲で送られる音量
+            volume = 1  # 音量設定
             if audio_file and os.path.exists(audio_file):
                 print(f"Playing audio: {audio_file} at volume: {volume}")
-                # スレッドを使って音量付きで音声を再生
                 threading.Thread(target=play_audio_in_thread, args=(audio_file, volume), daemon=True).start()
             else:
                 print(f"Audio file not found: {audio_file}")
-            
             person.characterUpdated = False
 
-    # YOLOの推論が終わるまで待機
     yolo_thread.join()
 
     # YOLOの結果を処理
-    results = results_container.get('results')
-    if results and results[0].boxes is not None:
+    bbox_results = results_container.get('bbox_results')
+    pose_results = results_container.get('pose_results')
+    
+    if bbox_results and bbox_results[0].boxes is not None:
         bboxes = [Bbox(float(score), [float(b) for b in box.numpy()])
-                  for box, score, class_id in zip(results[0].boxes.xyxy, results[0].boxes.conf, results[0].boxes.cls)
-                  if int(class_id) == 0 and score > 0.5]  # bboxesを更新
+                  for box, score, class_id in zip(bbox_results[0].boxes.xyxy, bbox_results[0].boxes.conf, bbox_results[0].boxes.cls)
+                  if int(class_id) == 0 and score > 0.5]
     else:
-        bboxes = []  # 人が検出されない場合はbboxesを空にする
+        bboxes = []
+
+    # ポーズ推定結果を pose 配列に保持
+    if pose_results:
+        pose_data = []
+        for person_pose in pose_results:
+            if person_pose.keypoints is not None:
+                if person_pose.keypoints.xy is not None and person_pose.keypoints.conf is not None:
+                    keypoints_xy = person_pose.keypoints.xy.cpu().numpy().tolist()  # [x, y] 座標を取得
+                    keypoints_conf = person_pose.keypoints.conf.cpu().numpy().tolist()  # 信頼度を取得
+                    pose_data.append({
+                        "keypoints": keypoints_xy,
+                        "confidence": keypoints_conf
+                    })
+                else:
+                    print("Keypoints or confidence is None")
+                    print(person_pose.keypoints)
+            else:
+                print("person_pose.keypoints is None")
 
     # JSONファイルへの書き込み
-    json_data = [person.to_dict() for person in people]
+    people_data = [person.to_dict() for person in people]
 
-    with open(output_file, "w") as f:
-        json.dump(json_data, f)
+    with open(people_output_file, "w") as people_file:
+        json.dump(people_data, people_file)
+
+    # JSONファイルへの書き込み (pose_results.json)
+    with open(pose_output_file, "w") as pose_file:
+        json.dump(pose_data, pose_file)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

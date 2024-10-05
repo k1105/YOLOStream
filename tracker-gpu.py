@@ -30,7 +30,7 @@ threshold = 200  # 距離の閾値（必要に応じて調整）
 bbox_buffer = {}
 bufferedBboxCount = 0  # バッファのBboxに一意なIDを付与するカウンター
 
-output_file = "yolo_results.json"
+output_file = "people_results.json"
 
 while True:
     ret, frame = cap.read()

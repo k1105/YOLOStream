@@ -4,6 +4,7 @@ yolov10b.pt
 yolo11n.pt
 myenv/
 .DS_Store
-yolo_results.json
+people_results.json
+pose_results.json
 __pycache__/
 audio/

@@ -12,8 +12,8 @@ async def time_server(websocket, path):
 
     while True:
         try:
-            # yolo_results.jsonファイルの内容を読み取る
-            with open("yolo_results.json", "r") as file:
+            # people_results.jsonファイルの内容を読み取る
+            with open("people_results.json", "r") as file:
                 data = json.load(file)
 
             if data != prevData:
@@ -21,7 +21,7 @@ async def time_server(websocket, path):
                 print(f"Sent data: {data}")
 
         except FileNotFoundError:
-            print("yolo_results.json not found.")
+            print("people_results.json not found.")
         except json.decoder.JSONDecodeError:
             print("json decode error.")
 
