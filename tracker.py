@@ -18,8 +18,8 @@ parser.add_argument("--gpu", help="Enable YOLO in gpu mode", action="store_true"
 arg = parser.parse_args()
 
 # YOLOモデルの読み込み
-bbox_model = YOLO("yolo11n.pt").gpu() if arg.gpu else YOLO("yolo11n.pt")
-pose_model = YOLO("yolo11n-pose.pt").gpu() if arg.gpu else YOLO("yolo11n-pose.pt")
+bbox_model = YOLO("yolo11n.pt").to("cuda") if arg.gpu else YOLO("yolo11n.pt")
+pose_model = YOLO("yolo11n-pose.pt").to("cuda") if arg.gpu else YOLO("yolo11n-pose.pt")
 
 # カメラの初期化
 cap = cv2.VideoCapture(0)
@@ -80,11 +80,11 @@ while True:
     # YOLOの結果を処理
     bbox_results = results_container.get('bbox_results')
     pose_results = results_container.get('pose_results')
-    
+
     if bbox_results and bbox_results[0].boxes is not None:
-        bboxes = [Bbox(float(score), [float(b) for b in box.numpy()])
-                  for box, score, class_id in zip(bbox_results[0].boxes.xyxy, bbox_results[0].boxes.conf, bbox_results[0].boxes.cls)
-                  if int(class_id) == 0 and score > 0.5]
+        bboxes = [Bbox(float(score.cpu()), [float(b) for b in box.cpu().numpy()])
+                for box, score, class_id in zip(bbox_results[0].boxes.xyxy, bbox_results[0].boxes.conf, bbox_results[0].boxes.cls)
+                if int(class_id) == 0 and score > 0.5]  # GPU -> CPU変換を追加
     else:
         bboxes = []
 
@@ -94,8 +94,8 @@ while True:
         for person_pose in pose_results:
             if person_pose.keypoints is not None:
                 if person_pose.keypoints.xy is not None and person_pose.keypoints.conf is not None:
-                    keypoints_xy = person_pose.keypoints.xy.cpu().numpy().tolist()  # [x, y] 座標を取得
-                    keypoints_conf = person_pose.keypoints.conf.cpu().numpy().tolist()  # 信頼度を取得
+                    keypoints_xy = person_pose.keypoints.xy.cpu().numpy().tolist()  # GPU -> CPU変換
+                    keypoints_conf = person_pose.keypoints.conf.cpu().numpy().tolist()  # GPU -> CPU変換
                     pose_data.append({
                         "keypoints": keypoints_xy,
                         "confidence": keypoints_conf
