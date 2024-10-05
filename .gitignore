@@ -3,6 +3,10 @@ yolov10n.pt
 yolov10b.pt
 yolo11n.pt
 yolo11n-pose.pt
+yolo11l.pt
+yolo11l-pose.pt
+yolo11x.pt
+yolo11x-pose.pt
 myenv/
 .DS_Store
 pose_results.json

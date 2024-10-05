@@ -18,8 +18,8 @@ parser.add_argument("--gpu", help="Enable YOLO in gpu mode", action="store_true"
 arg = parser.parse_args()
 
 # YOLOモデルの読み込み
-bbox_model = YOLO("yolo11n.pt").to("cuda") if arg.gpu else YOLO("yolo11n.pt")
-pose_model = YOLO("yolo11n-pose.pt").to("cuda") if arg.gpu else YOLO("yolo11n-pose.pt")
+bbox_model = YOLO("yolo11l.pt").to("cuda") if arg.gpu else YOLO("yolo11n.pt")
+pose_model = YOLO("yolo11l-pose.pt").to("cuda") if arg.gpu else YOLO("yolo11n-pose.pt")
 
 # カメラの初期化
 cap = cv2.VideoCapture(0)
