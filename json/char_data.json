@@ -1,0 +1,210 @@
+[
+  {
+    "aspect-ratio": 0.3824,
+    "walking": [
+      { "char": "j", "x": 0, "y": -0.15, "s": 1, "name": "alphabet_j" }
+    ],
+    "paused": []
+  },
+  {
+    "aspect-ratio": 0.4182,
+    "walking": [{ "char": "ﾘ", "x": 0, "y": 0, "s": 1, "name": "japanese_ri" }],
+    "paused": []
+  },
+  {
+    "aspect-ratio": 0.4541,
+    "walking": [
+      { "char": "く", "x": 0, "y": 0, "s": 1, "name": "japanese_ku" }
+    ],
+    "paused": []
+  },
+  {
+    "aspect-ratio": 0.4897,
+    "walking": [{ "char": "9", "x": 0, "y": 0, "s": 1, "name": "number_9" }],
+    "paused": []
+  },
+  {
+    "aspect-ratio": 0.5042,
+    "walking": [],
+    "paused": [{ "char": "l", "x": 0, "y": 0, "s": 1, "name": "alphabet_l" }]
+  },
+  {
+    "aspect-ratio": 0.5256,
+    "walking": [{ "char": "ﾉ", "x": 0, "y": 0, "s": 1, "name": "japanese_no" }],
+    "paused": []
+  },
+  {
+    "aspect-ratio": 0.5615,
+    "walking": [{ "char": "ｳ", "x": 0, "y": 0, "s": 1, "name": "japanese_u" }],
+    "paused": [
+      { "char": "h", "x": 0, "y": 0, "s": 1, "name": "alphabet_h" },
+      { "char": "p", "x": 0, "y": -0.15, "s": 1, "name": "alphabet_p" },
+      { "char": "I", "x": 0, "y": 0, "s": 1, "name": "alphabet_i" }
+    ]
+  },
+  {
+    "aspect-ratio": 0.5974,
+    "walking": [{ "char": "ン", "x": 0, "y": 0, "s": 1, "name": "japanese_n" }],
+    "paused": []
+  },
+  {
+    "aspect-ratio": 0.6332,
+    "walking": [
+      { "char": "ハ", "x": 0, "y": 0, "s": 1, "name": "japanese_ha" }
+    ],
+    "paused": [
+      { "char": "b", "x": 0, "y": 0, "s": 1, "name": "alphabet_b" },
+      { "char": "J", "x": 0, "y": 0, "s": 1, "name": "alphabet_j" }
+    ]
+  },
+  {
+    "aspect-ratio": 0.6688,
+    "walking": [
+      { "char": "と", "x": 0, "y": 0, "s": 1, "name": "japanese_to" }
+    ],
+    "paused": []
+  },
+  {
+    "aspect-ratio": 0.7047,
+    "walking": [
+      { "char": "り", "x": 0, "y": 0, "s": 1, "name": "japanese_ri" }
+    ],
+    "paused": [
+      { "char": "0", "x": 0, "y": 0, "s": 1, "name": "number_0" },
+      { "char": "も", "x": 0, "y": 0, "s": 1, "name": "japanese_mo" },
+      { "char": "と", "x": 0, "y": 0, "s": 1, "name": "japanese_to" }
+    ]
+  },
+  {
+    "aspect-ratio": 0.7406,
+    "walking": [
+      { "char": "ミ", "x": 0, "y": 0, "s": 1, "name": "japanese_mi" }
+    ],
+    "paused": [
+      { "char": "イ", "x": 0, "y": 0, "s": 1, "name": "japanese_i" },
+      { "char": "F", "x": 0, "y": 0, "s": 1, "name": "alphabet_f" }
+    ]
+  },
+  {
+    "aspect-ratio": 0.7765,
+    "walking": [
+      { "char": "ノ", "x": 0, "y": 0, "s": 1, "name": "japanese_no" }
+    ],
+    "paused": []
+  },
+  {
+    "aspect-ratio": 0.8124,
+    "walking": [{ "char": "う", "x": 0, "y": 0, "s": 1, "name": "japanese_u" }],
+    "paused": [
+      { "char": "K", "x": 0, "y": 0, "s": 1, "name": "alphabet_k" },
+      { "char": "Y", "x": 0, "y": 0, "s": 1, "name": "alphabet_y" }
+    ]
+  },
+  {
+    "aspect-ratio": 0.8482,
+    "walking": [
+      { "char": "メ", "x": 0, "y": 0, "s": 1, "name": "japanese_me" }
+    ],
+    "paused": []
+  },
+  {
+    "aspect-ratio": 0.8841,
+    "walking": [
+      { "char": "ナ", "x": 0, "y": 0, "s": 1, "name": "japanese_na" }
+    ],
+    "paused": [
+      { "char": "ネ", "x": 0, "y": 0, "s": 1, "name": "japanese_ne" },
+      { "char": "T", "x": 0, "y": 0, "s": 1, "name": "alphabet_t" }
+    ]
+  },
+  {
+    "aspect-ratio": 0.938,
+    "walking": [
+      { "char": "ヤ", "x": 0, "y": 0, "s": 1, "name": "japanese_ya" },
+      { "char": "ヒ", "x": 0, "y": 0, "s": 1, "name": "japanese_hi" },
+      { "char": "チ", "x": 0, "y": 0, "s": 1, "name": "japanese_chi" }
+    ],
+    "paused": [
+      { "char": "よ", "x": 0, "y": 0, "s": 1, "name": "japanese_yo" },
+      { "char": "ホ", "x": 0, "y": 0, "s": 1, "name": "japanese_ho" }
+    ]
+  },
+  {
+    "aspect-ratio": 1.0,
+    "walking": [
+      { "char": "ひ", "x": 0, "y": 0, "s": 1, "name": "japanese_hi" },
+      { "char": "人", "x": 0, "y": 0, "s": 1, "name": "kanji_hito" },
+      { "char": "か", "x": 0, "y": 0, "s": 1, "name": "japanese_ka" },
+      { "char": "ゆ", "x": 0, "y": 0, "s": 1, "name": "japanese_yu" },
+      { "char": "八", "x": 0, "y": 0, "s": 1, "name": "number_8" }
+    ],
+    "paused": [
+      { "char": "木", "x": 0, "y": 0, "s": 1, "name": "kanji_ki" },
+      { "char": "オ", "x": 0, "y": 0, "s": 1, "name": "japanese_o" },
+      { "char": "十", "x": 0, "y": 0, "s": 1, "name": "number_10" }
+    ]
+  },
+  {
+    "aspect-ratio": 1.0661,
+    "walking": [
+      { "char": "六", "x": 0, "y": 0, "s": 1, "name": "number_6" },
+      { "char": "や", "x": 0, "y": 0, "s": 1, "name": "japanese_ya" },
+      { "char": "ふ", "x": 0, "y": 0, "s": 1, "name": "japanese_fu" },
+      { "char": "た", "x": 0, "y": 0, "s": 1, "name": "japanese_ta" }
+    ],
+    "paused": [{ "char": "七", "x": 0, "y": 0, "s": 1, "name": "number_7" }]
+  },
+  {
+    "aspect-ratio": 1.1415,
+    "walking": [
+      { "char": "ム", "x": 0, "y": 0, "s": 1, "name": "japanese_mu" },
+      { "char": "X", "x": 0, "y": 0, "s": 1, "name": "alphabet_x" },
+      { "char": "ル", "x": 0, "y": 0, "s": 1, "name": "japanese_ru" }
+    ],
+    "paused": [
+      { "char": "モ", "x": 0, "y": 0, "s": 1, "name": "japanese_mo" },
+      { "char": "テ", "x": 0, "y": 0, "s": 1, "name": "japanese_te" }
+    ]
+  },
+  {
+    "aspect-ratio": 1.2284,
+    "walking": [
+      { "char": "ヌ", "x": 0, "y": 0, "s": 1, "name": "japanese_nu" },
+      { "char": "て", "x": 0, "y": 0, "s": 1, "name": "japanese_te" },
+      { "char": "九", "x": 0, "y": 0, "s": 1, "name": "number_9" }
+    ],
+    "paused": [
+      { "char": "V", "x": 0, "y": 0, "s": 1, "name": "alphabet_v" },
+      { "char": "A", "x": 0, "y": 0, "s": 1, "name": "alphabet_a" }
+    ]
+  },
+  {
+    "aspect-ratio": 1.3296,
+    "walking": [
+      { "char": "ハ", "x": 0, "y": 0, "s": 1, "name": "japanese_ha" },
+      { "char": "せ", "x": 0, "y": 0, "s": 1, "name": "japanese_se" },
+      { "char": "カ", "x": 0, "y": 0, "s": 1, "name": "japanese_ka" }
+    ],
+    "paused": [{ "char": "三", "x": 0, "y": 0, "s": 1, "name": "number_3" }]
+  },
+  {
+    "aspect-ratio": 1.449,
+    "walking": [
+      { "char": "つ", "x": 0, "y": 0, "s": 1, "name": "japanese_tsu" },
+      { "char": "ス", "x": 0, "y": 0, "s": 1, "name": "japanese_su" }
+    ],
+    "paused": [{ "char": "エ", "x": 0, "y": 0, "s": 1, "name": "japanese_e" }]
+  },
+  {
+    "aspect-ratio": 1.592,
+    "walking": [
+      { "char": "へ", "x": 0, "y": 0, "s": 1, "name": "japanese_he" }
+    ],
+    "paused": [{ "char": "二", "x": 0, "y": 0, "s": 1, "name": "number_2" }]
+  },
+  {
+    "aspect-ratio": 1.7662,
+    "walking": [],
+    "paused": [{ "char": "一", "x": 0, "y": 0, "s": 1, "name": "number_1" }]
+  }
+]

@@ -10,7 +10,7 @@ video_path = "./video/dotonbori.mov"  # Replace with your video file path
 cap = cv2.VideoCapture(video_path)
 
 # YOLO推論結果を保存するファイルパス
-output_file = "yolo_results.json"
+output_file = "people_results.json"
 
 while True:
     ret, frame = cap.read()
