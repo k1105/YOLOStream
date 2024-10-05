@@ -22,6 +22,7 @@ class Person:
         self.movingStatus = movingStatus
         self.pausedFrameCount = 0  # 停止状態のフレームカウントを初期化
         self.charIndex = None  # 前回のインデックスを保存する
+        self.characterUpdated = False
 
     def update_bbox(self, new_bbox: Bbox):
         current_time = time.time()
@@ -86,7 +87,9 @@ class Person:
             else:
                 c = random.choice(selected_characters)
 
-            self.displayCharacter = CharData(c['char'], c['x'], c['y'], c['s'])
+            if c['char'] != self.displayCharacter.char:
+                self.characterUpdated = True 
+            self.displayCharacter = CharData(c['char'], c['x'], c['y'], c['s'], c['name'])
 
         # インデックスを更新
         self.charIndex = closest_index

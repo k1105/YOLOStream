@@ -6,9 +6,14 @@ from ultralytics import YOLO
 from lib.relation_calculator import update_relation
 from classes.bbox import Bbox
 from lib.update_people import update_people
+import pygame
+import threading
+import os
+from lib.get_audio_file_with_extention import get_audio_file_with_extension
+from lib.play_audio_in_thread import play_audio_in_thread
 
 # YOLOモデルの読み込み
-model = YOLO("yolov10n.pt")
+model = YOLO("yolo11n.pt")
 
 # カメラの初期化
 cap = cv2.VideoCapture(0)
@@ -27,6 +32,9 @@ bbox_buffer = {}
 bufferedBboxCount = 0  # バッファのBboxに一意なIDを付与するカウンター
 
 output_file = "yolo_results.json"
+
+# pygameの初期化
+pygame.mixer.init()
 
 # YOLOの推論を別スレッドで実行
 def yolo_detection(frame, results_container):
@@ -50,6 +58,19 @@ while True:
     relation = update_relation(people, bboxes, threshold)  # bboxesが空でも処理する
     people, peopleCounts, bbox_buffer, bufferedBboxCount = update_people(relation, people, bboxes, bbox_buffer, peopleCounts, bufferedBboxCount)
     # people, peopleCounts = update_people(relation, people, bboxes, peopleCounts)
+    
+    for person in people:
+        if person.characterUpdated:        
+            audio_file = get_audio_file_with_extension(person.displayCharacter.name)
+            volume = 1  # 0〜1の範囲で送られる音量
+            if audio_file and os.path.exists(audio_file):
+                print(f"Playing audio: {audio_file} at volume: {volume}")
+                # スレッドを使って音量付きで音声を再生
+                threading.Thread(target=play_audio_in_thread, args=(audio_file, volume), daemon=True).start()
+            else:
+                print(f"Audio file not found: {audio_file}")
+            
+            person.characterUpdated = False
 
     # YOLOの推論が終わるまで待機
     yolo_thread.join()
