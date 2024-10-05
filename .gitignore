@@ -2,8 +2,11 @@ video/
 yolov10n.pt
 yolov10b.pt
 yolo11n.pt
+yolo11n-pose.pt
 myenv/
 .DS_Store
 yolo_results.json
+pose_results.json
+people_results.json
 __pycache__/
 audio/
