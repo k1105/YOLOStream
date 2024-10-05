@@ -8,7 +8,7 @@ from classes.bbox import Bbox
 from lib.update_people import update_people
 
 # YOLOモデルの読み込み
-model = YOLO("yolov10n.pt")
+model = YOLO("yolo11n.pt")
 
 # カメラの初期化
 cap = cv2.VideoCapture(0)

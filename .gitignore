@@ -1,6 +1,7 @@
 video/
 yolov10n.pt
 yolov10b.pt
+yolo11n.pt
 myenv/
 .DS_Store
 yolo_results.json
