@@ -6,3 +6,4 @@ myenv/
 .DS_Store
 yolo_results.json
 __pycache__/
+audio/
