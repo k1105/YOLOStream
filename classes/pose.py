@@ -23,8 +23,7 @@ class Pose:
         if len(self.keypoints) == 0:
             return None
 
-        # keypointsが二重配列になっている前提で処理
-        keypoints_array = self.keypoints[0]  # 1人目のキーポイントリストを使用
+        keypoints_array = self.keypoints  # 1人目のキーポイントリストを使用
 
         x_coords = [kp[0] for kp in keypoints_array]
         y_coords = [kp[1] for kp in keypoints_array]
