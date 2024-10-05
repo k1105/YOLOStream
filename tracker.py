@@ -12,18 +12,20 @@ import os
 from lib.get_audio_file_with_extention import get_audio_file_with_extension
 from lib.play_audio_in_thread import play_audio_in_thread
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--mirrored", help="optional", action="store_true")
+parser.add_argument("--gpu", help="Enable YOLO in gpu mode", action="store_true")
+arg = parser.parse_args()
+
 # YOLOモデルの読み込み
-bbox_model = YOLO("yolo11n.pt")
-pose_model = YOLO("yolo11n-pose.pt")
+bbox_model = YOLO("yolo11n.pt").gpu() if arg.gpu else YOLO("yolo11n.pt")
+pose_model = YOLO("yolo11n-pose.pt").gpu() if arg.gpu else YOLO("yolo11n-pose.pt")
 
 # カメラの初期化
 cap = cv2.VideoCapture(0)
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 print(f"カメラの解像度: {width}x{height}")
-
-parser = argparse.ArgumentParser()
-parser.add_argument("--mirrored", help="optional", action="store_true")
 
 people = []
 bboxes = []
@@ -40,7 +42,6 @@ pygame.mixer.init()
 
 # YOLOの推論を別スレッドで実行
 def yolo_detection(frame, results_container):
-    arg = parser.parse_args()
     if arg.mirrored:
         frame = cv2.flip(frame, 1)
     # 物体検出モデルで推論
