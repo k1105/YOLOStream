@@ -5,7 +5,7 @@ from ultralytics import YOLO
 # Load a pre-trained YOLOv10n model
 model = YOLO("yolov10n.pt")
 
-# Initialize the webcam
+# Initialize the webcamå
 cap = cv2.VideoCapture(0)  # '0' is usually the default camera, change if necessary
 # カメラの解像度を取得
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -14,7 +14,7 @@ print(f"カメラの解像度: {width}x{height}")
 
 
 # YOLO推論結果を保存するファイルパス
-output_file = "yolo_results.json"
+output_file = "people_results.json"
 
 while True:
     ret, frame = cap.read()
