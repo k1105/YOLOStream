@@ -1,6 +1,7 @@
 from classes.bbox import Bbox
 from classes.char_data import CharData
 import random
+import math
 import time
 from classes.pose import Pose
 
@@ -46,36 +47,84 @@ class Person:
         else:
             self.pausedFrameCount = 0
 
-    def update_display_character(self, character_data):
-        width = self.bbox.size()["width"]
-        height = self.bbox.size()["height"]
-        aspect_ratio = width / height
-        closest_index = 0
-        min_difference = float('inf')
+    def update_display_character(self, hitomoji_data):
+        # bboxの幅と高さを取得
+        width = self.bbox.bbox[2] - self.bbox.bbox[0]
+        height = self.bbox.bbox[3] - self.bbox.bbox[1]
 
-        for index, data in enumerate(character_data):
-            diff = abs(aspect_ratio - data['aspect-ratio'])
-            if diff < min_difference:
-                min_difference = diff
+        # スケール係数を計算
+        scale = 1000 / max(width, height)
+
+        # bboxに基づいてposeを正規化
+        normalized_pose = []
+        for kpt in self.pose.keypoints:
+            if kpt == [-1, -1]:
+                normalized_pose.append(kpt)  # 無効なキーポイントはそのまま
+            else:
+                new_x = int((kpt[0] - self.bbox.bbox[0]) * scale)
+                new_y = int((kpt[1] - self.bbox.bbox[1]) * scale)
+                normalized_pose.append([new_x, new_y])
+
+        # 最も類似している文字を探す
+        closest_index = 0
+        min_distance = float('inf')
+
+        for index, data in enumerate(hitomoji_data):
+            total_distance = 0
+            hitomoji_keypoints = data['keypoints']
+            
+            # キーポイントの距離を計算
+            for i, (pose_kpt, hitomoji_kpt) in enumerate(zip(normalized_pose, hitomoji_keypoints)):
+                if pose_kpt == [-1, -1] or hitomoji_kpt == [-1, -1]:
+                    continue  # 無効なキーポイントはスキップ
+
+                # 2点間の距離を計算
+                distance = math.sqrt((pose_kpt[0] - hitomoji_kpt[0]) ** 2 + (pose_kpt[1] - hitomoji_kpt[1]) ** 2)
+                total_distance += distance
+            
+            # 最小距離を持つ文字を更新
+            if total_distance < min_distance:
+                min_distance = total_distance
                 closest_index = index
 
-        selected_characters = (
-            character_data[closest_index]['walking']
-            if self.movingStatus == "walking"
-            else character_data[closest_index]['paused']
-        )
+            if hitomoji_data[closest_index]['name'] != self.displayCharacter.char:
+                self.characterUpdated = True
+            self.displayCharacter = CharData(hitomoji_data[closest_index]['name'], 0, 0, 1, "japanese_e")
 
-        if closest_index != self.charIndex and len(selected_characters) > 0:
-            if len(selected_characters) == 1:
-                c = selected_characters[0]
-            else:
-                c = random.choice(selected_characters)
-
-            if c['char'] != self.displayCharacter.char:
-                self.characterUpdated = True 
-            self.displayCharacter = CharData(c['char'], c['x'], c['y'], c['s'], c['name'])
-
+        # インデックスを更新
         self.charIndex = closest_index
+
+
+    # def update_display_character(self, character_data):
+    #     width = self.bbox.size()["width"]
+    #     height = self.bbox.size()["height"]
+    #     aspect_ratio = width / height
+    #     closest_index = 0
+    #     min_difference = float('inf')
+
+    #     for index, data in enumerate(character_data):
+    #         diff = abs(aspect_ratio - data['aspect-ratio'])
+    #         if diff < min_difference:
+    #             min_difference = diff
+    #             closest_index = index
+
+    #     selected_characters = (
+    #         character_data[closest_index]['walking']
+    #         if self.movingStatus == "walking"
+    #         else character_data[closest_index]['paused']
+    #     )
+
+    #     if closest_index != self.charIndex and len(selected_characters) > 0:
+    #         if len(selected_characters) == 1:
+    #             c = selected_characters[0]
+    #         else:
+    #             c = random.choice(selected_characters)
+
+    #         if c['char'] != self.displayCharacter.char:
+    #             self.characterUpdated = True 
+    #         self.displayCharacter = CharData(c['char'], c['x'], c['y'], c['s'], c['name'])
+
+    #     self.charIndex = closest_index
 
     def update_pose(self, pose: Pose):
         """
