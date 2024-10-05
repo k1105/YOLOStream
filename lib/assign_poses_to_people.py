@@ -2,11 +2,6 @@ import numpy as np
 from classes.pose import Pose
 
 def assign_poses_to_people(people, poses):
-    """
-    人物とポーズの紐付けを行う関数
-    people: Personオブジェクトのリスト
-    poses: ポーズ情報のリスト
-    """
     assigned_poses = []  # 既に紐付けられたposeを管理
 
     for person in people:
