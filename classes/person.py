@@ -1,6 +1,6 @@
 from classes.bbox import Bbox
 from classes.char_data import CharData
-import random
+from lib.get_char_info import get_char_info
 import math
 import time
 from classes.pose import Pose
@@ -48,51 +48,52 @@ class Person:
             self.pausedFrameCount = 0
 
     def update_display_character(self, hitomoji_data):
-        # bboxの幅と高さを取得
-        width = self.bbox.bbox[2] - self.bbox.bbox[0]
-        height = self.bbox.bbox[3] - self.bbox.bbox[1]
+        if self.pose:
+            # bboxの幅と高さを取得
+            width = self.bbox.bbox[2] - self.bbox.bbox[0]
+            height = self.bbox.bbox[3] - self.bbox.bbox[1]
 
-        # スケール係数を計算
-        scale = 1000 / max(width, height)
+            # スケール係数を計算
+            scale = 1000 / max(width, height)
 
-        # bboxに基づいてposeを正規化
-        normalized_pose = []
-        for kpt in self.pose.keypoints:
-            if kpt == [-1, -1]:
-                normalized_pose.append(kpt)  # 無効なキーポイントはそのまま
-            else:
-                new_x = int((kpt[0] - self.bbox.bbox[0]) * scale)
-                new_y = int((kpt[1] - self.bbox.bbox[1]) * scale)
-                normalized_pose.append([new_x, new_y])
+            # bboxに基づいてposeを正規化
+            normalized_pose = []
+            for kpt in self.pose.keypoints:
+                if kpt == [-1, -1]:
+                    normalized_pose.append(kpt)  # 無効なキーポイントはそのまま
+                else:
+                    new_x = int((kpt[0] - self.bbox.bbox[0]) * scale)
+                    new_y = int((kpt[1] - self.bbox.bbox[1]) * scale)
+                    normalized_pose.append([new_x, new_y])
 
-        # 最も類似している文字を探す
-        closest_index = 0
-        min_distance = float('inf')
+            # 最も類似している文字を探す
+            closest_index = 0
+            min_distance = float('inf')
 
-        for index, data in enumerate(hitomoji_data):
-            total_distance = 0
-            hitomoji_keypoints = data['keypoints']
-            
-            # キーポイントの距離を計算
-            for i, (pose_kpt, hitomoji_kpt) in enumerate(zip(normalized_pose, hitomoji_keypoints)):
-                if pose_kpt == [-1, -1] or hitomoji_kpt == [-1, -1]:
-                    continue  # 無効なキーポイントはスキップ
+            for index, data in enumerate(hitomoji_data):
+                total_distance = 0
+                hitomoji_keypoints = data['keypoints']
+                
+                # キーポイントの距離を計算
+                for i, (pose_kpt, hitomoji_kpt) in enumerate(zip(normalized_pose, hitomoji_keypoints)):
+                    if pose_kpt == [-1, -1] or hitomoji_kpt == [-1, -1]:
+                        continue  # 無効なキーポイントはスキップ
 
-                # 2点間の距離を計算
-                distance = math.sqrt((pose_kpt[0] - hitomoji_kpt[0]) ** 2 + (pose_kpt[1] - hitomoji_kpt[1]) ** 2)
-                total_distance += distance
-            
-            # 最小距離を持つ文字を更新
-            if total_distance < min_distance:
-                min_distance = total_distance
-                closest_index = index
+                    # 2点間の距離を計算
+                    distance = math.sqrt((pose_kpt[0] - hitomoji_kpt[0]) ** 2 + (pose_kpt[1] - hitomoji_kpt[1]) ** 2)
+                    total_distance += distance
+                
+                # 最小距離を持つ文字を更新
+                if total_distance < min_distance:
+                    min_distance = total_distance
+                    closest_index = index
 
-        if hitomoji_data[closest_index]['name'] != self.displayCharacter.char:
-            self.characterUpdated = True
-        self.displayCharacter = CharData(hitomoji_data[closest_index]['name'], 0, 0, 1, "japanese_e")
+            if hitomoji_data[closest_index]['name'] != self.displayCharacter.char:
+                self.characterUpdated = True
+            self.displayCharacter = get_char_info(hitomoji_data[closest_index]['name'])
 
-        # インデックスを更新
-        self.charIndex = closest_index
+            # インデックスを更新
+            self.charIndex = closest_index
 
 
     # def update_display_character(self, character_data):
