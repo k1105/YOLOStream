@@ -1,6 +1,6 @@
 from classes.person import Person
 from classes.char_data import CharData
-
+import random
 import json
 
 def load_character_data(filepath: str):
@@ -8,7 +8,8 @@ def load_character_data(filepath: str):
         data = json.load(file)
     return data
 
-character_data = load_character_data('json/hitomoji_data.json')
+character_data = load_character_data('json/char_data.json')
+hitomoji_data = load_character_data('json/hitomoji_data.json')
 
 def update_people(relation, people, bboxes, bbox_buffer, peopleCounts, bufferedBboxCount, min_frames_for_new_person=3, max_frame_age=10, max_lost_frames=3):
     activePersonIds = set([entry['id'] for sublist in relation for entry in sublist])
@@ -55,7 +56,11 @@ def update_people(relation, people, bboxes, bbox_buffer, peopleCounts, bufferedB
             if person:
                 person.update_bbox(bboxes[i])
                 person.update_moving_status(200, 200)
-                person.update_display_character(character_data)
+                if person.characterUpdatedFrameCount < 2:
+                    person.characterUpdatedFrameCount +=1
+                else:
+                    person.update_display_character(hitomoji_data, character_data)
+                    person.characterUpdatedFrameCount = 0
 
     # 古いバッファをクリア
     bbox_buffer = {key: val for key, val in bbox_buffer.items() if val['frame_count'] < max_frame_age or val['count'] >= min_frames_for_new_person}

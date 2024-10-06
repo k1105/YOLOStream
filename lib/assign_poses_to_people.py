@@ -2,12 +2,13 @@ import numpy as np
 from classes.pose import Pose
 
 def assign_poses_to_people(people, poses):
-    assigned_poses = []  # 既に紐付けられたposeを管理
+    assigned_pose_centers = []  # 既に紐付けられたposeを管理
 
     for person in people:
         person_center = np.array([person.bbox.center()["x"], person.bbox.center()["y"]])
         closest_pose = None
         closest_distance = float('inf')
+        closest_pose_center = None
 
         # keypoints の構造に基づき、正しくアクセス
         if len(poses) > 0:
@@ -24,17 +25,21 @@ def assign_poses_to_people(people, poses):
 
                 pose_center_array = np.array([pose_center["x"], pose_center["y"]])  # np.arrayに変換
 
+                if any(np.array_equal(pose_center_array, assigned_pose) for assigned_pose in assigned_pose_centers):
+                    continue
+
                 # バウンディングボックスの中心との距離を計算
                 distance = np.linalg.norm(pose_center_array - person_center)
 
                 # 最も近いポーズを選択
-                if distance < closest_distance and pose not in assigned_poses:
+                if distance < closest_distance:
                     closest_distance = distance
                     closest_pose = pose
+                    closest_pose_center = pose_center_array
 
         # 最も近いポーズをPersonに割り当てる
         if closest_pose:
             person.update_pose(closest_pose)
-            assigned_poses.append(closest_pose)
+            assigned_pose_centers.append(closest_pose_center)
 
     # 紐付けられなかったポーズは破棄される

@@ -4,6 +4,7 @@ from lib.get_char_info import get_char_info
 import math
 import time
 from classes.pose import Pose
+import random
 
 class Person:
     def __init__(self, id, speed, bbox: Bbox, displayCharacter: CharData, movingStatus="paused", pose=None):
@@ -19,6 +20,7 @@ class Person:
         self.pausedFrameCount = 0
         self.charIndex = None
         self.characterUpdated = False
+        self.characterUpdatedFrameCount = 0
 
     def update_bbox(self, new_bbox: Bbox):
         current_time = time.time()
@@ -47,7 +49,7 @@ class Person:
         else:
             self.pausedFrameCount = 0
 
-    def update_display_character(self, hitomoji_data):
+    def update_display_character(self, hitomoji_data, character_data):
         if self.pose:
             # bboxの幅と高さを取得
             width = self.bbox.bbox[2] - self.bbox.bbox[0]
@@ -93,6 +95,36 @@ class Person:
             self.displayCharacter = get_char_info(hitomoji_data[closest_index]['name'])
 
             # インデックスを更新
+            self.charIndex = closest_index
+        else:
+            width = self.bbox.size()["width"]
+            height = self.bbox.size()["height"]
+            aspect_ratio = width / height
+            closest_index = 0
+            min_difference = float('inf')
+
+            for index, data in enumerate(character_data):
+                diff = abs(aspect_ratio - data['aspect-ratio'])
+                if diff < min_difference:
+                    min_difference = diff
+                    closest_index = index
+
+            selected_characters = (
+                character_data[closest_index]['walking']
+                if self.movingStatus == "walking"
+                else character_data[closest_index]['paused']
+            )
+
+            if closest_index != self.charIndex and len(selected_characters) > 0:
+                if len(selected_characters) == 1:
+                    c = selected_characters[0]
+                else:
+                    c = random.choice(selected_characters)
+
+                if c['char'] != self.displayCharacter.char:
+                    self.characterUpdated = True 
+                self.displayCharacter = CharData(c['char'], c['x'], c['y'], c['s'], c['name'])
+
             self.charIndex = closest_index
 
 
