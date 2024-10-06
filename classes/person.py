@@ -1,6 +1,6 @@
 from classes.bbox import Bbox
 from classes.char_data import CharData
-import random
+from lib.get_char_info import get_char_info
 import math
 import time
 from classes.pose import Pose
@@ -90,7 +90,7 @@ class Person:
 
             if hitomoji_data[closest_index]['name'] != self.displayCharacter.char:
                 self.characterUpdated = True
-            self.displayCharacter = CharData(hitomoji_data[closest_index]['name'], 0, 0, 1, "japanese_e")
+            self.displayCharacter = get_char_info(hitomoji_data[closest_index]['name'])
 
             # インデックスを更新
             self.charIndex = closest_index
