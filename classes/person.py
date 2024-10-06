@@ -87,9 +87,9 @@ class Person:
                 min_distance = total_distance
                 closest_index = index
 
-            if hitomoji_data[closest_index]['name'] != self.displayCharacter.char:
-                self.characterUpdated = True
-            self.displayCharacter = CharData(hitomoji_data[closest_index]['name'], 0, 0, 1, "japanese_e")
+        if hitomoji_data[closest_index]['name'] != self.displayCharacter.char:
+            self.characterUpdated = True
+        self.displayCharacter = CharData(hitomoji_data[closest_index]['name'], 0, 0, 1, "japanese_e")
 
         # インデックスを更新
         self.charIndex = closest_index
