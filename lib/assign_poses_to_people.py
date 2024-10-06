@@ -10,26 +10,27 @@ def assign_poses_to_people(people, poses):
         closest_distance = float('inf')
 
         # keypoints の構造に基づき、正しくアクセス
-        for person_index in range(len(poses[0]["keypoints"])):
-            keypoints = poses[0]["keypoints"][person_index]  # 各人物のキーポイント取得
-            confidence = poses[0]["confidence"][person_index]  # 各人物のconfidence取得
+        if len(poses) > 0:
+            for person_index in range(len(poses[0]["keypoints"])):
+                keypoints = poses[0]["keypoints"][person_index]  # 各人物のキーポイント取得
+                confidence = poses[0]["confidence"][person_index]  # 各人物のconfidence取得
 
-            # Pose オブジェクトを作成
-            pose = Pose(keypoints, confidence)
-            pose_center = pose.calculate_center()
+                # Pose オブジェクトを作成
+                pose = Pose(keypoints, confidence)
+                pose_center = pose.calculate_center()
 
-            if pose_center is None:
-                continue
+                if pose_center is None:
+                    continue
 
-            pose_center_array = np.array([pose_center["x"], pose_center["y"]])  # np.arrayに変換
+                pose_center_array = np.array([pose_center["x"], pose_center["y"]])  # np.arrayに変換
 
-            # バウンディングボックスの中心との距離を計算
-            distance = np.linalg.norm(pose_center_array - person_center)
+                # バウンディングボックスの中心との距離を計算
+                distance = np.linalg.norm(pose_center_array - person_center)
 
-            # 最も近いポーズを選択
-            if distance < closest_distance and pose not in assigned_poses:
-                closest_distance = distance
-                closest_pose = pose
+                # 最も近いポーズを選択
+                if distance < closest_distance and pose not in assigned_poses:
+                    closest_distance = distance
+                    closest_pose = pose
 
         # 最も近いポーズをPersonに割り当てる
         if closest_pose:
