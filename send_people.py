@@ -8,7 +8,7 @@ parser.add_argument("--address", help="Server address", default="localhost")
 args = parser.parse_args()
 address = args.address
 
-async def time_server(websocket, path):
+async def time_server(websocket):
     print("time_server: new client connected")  # ログを追加
     prevData = ""
 
