@@ -9,20 +9,22 @@ args = parser.parse_args()
 address = args.address
 
 async def time_server(websocket, path):
-    prevData = ""
+    prevData = None
     while True:
         try:
             with open("people_results.json", "r") as file:
                 data = json.load(file)
-
-            if data != prevData:
-                await websocket.send(json.dumps(data))
-                print(f"SENT DATA")
-
         except FileNotFoundError:
             print("people_results.json not found.")
+            data = None
         except json.decoder.JSONDecodeError:
             print("json decode error.")
+            data = None
+
+        # data が None でなければ、前回データと比較して送信
+        if data and data != prevData:
+            await websocket.send(json.dumps(data))
+            print("SENT DATA")
 
         prevData = data
         await asyncio.sleep(0.01)
@@ -33,4 +35,4 @@ async def main():
         await asyncio.Future()  # 無限に実行するための待機
 
 if __name__ == "__main__":
-    asyncio.run(main())  # ここで適切にイベントループを開始
+    asyncio.run(main())
