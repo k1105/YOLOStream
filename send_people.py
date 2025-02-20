@@ -37,4 +37,4 @@ async def main():
         await asyncio.Future()  # 無限に実行するための待機
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    asyncio.run(main())  # ここで適切にイベントループを開始
