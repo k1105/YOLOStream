@@ -8,8 +8,10 @@ parser.add_argument("--address", help="Server address", default="localhost")
 args = parser.parse_args()
 address = args.address
 
-async def time_server(websocket, path):
+async def time_server(websocket):
+    print("time_server: new client connected")  # ログを追加
     prevData = ""
+
     while True:
         try:
             with open("people_results.json", "r") as file:
@@ -17,12 +19,14 @@ async def time_server(websocket, path):
 
             if data != prevData:
                 await websocket.send(json.dumps(data))
-                print(f"SENT DATA")
-
+                print("SENT DATA")
         except FileNotFoundError:
             print("people_results.json not found.")
         except json.decoder.JSONDecodeError:
             print("json decode error.")
+        except websockets.ConnectionClosed:
+            print("Client disconnected.")
+            break  # ループを抜けて終了
 
         prevData = data
         await asyncio.sleep(0.01)
