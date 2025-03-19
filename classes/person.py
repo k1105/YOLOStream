@@ -36,10 +36,11 @@ class Person:
 
     def update_moving_status(self, x_speed_threshold: float, y_speed_threshold: float):
         speed = self.speed
-        if (
-            (abs(speed['x']) > x_speed_threshold and abs(speed['x'] / speed['y']) > 2) or 
-            self.movingStatus == "walking"
-        ):
+        if abs(speed['x']) > x_speed_threshold and abs(speed['y']) > 0:
+            ratio = abs(speed['x'] / speed['y'])
+            if ratio > 2:
+                self.movingStatus = "walking"
+        elif self.movingStatus == "walking":
             self.movingStatus = "walking"
 
         if abs(speed['x']) < x_speed_threshold and abs(speed['y']) < y_speed_threshold:
@@ -126,38 +127,6 @@ class Person:
                 self.displayCharacter = CharData(c['char'], c['x'], c['y'], c['s'], c['name'])
 
             self.charIndex = closest_index
-
-
-    # def update_display_character(self, character_data):
-    #     width = self.bbox.size()["width"]
-    #     height = self.bbox.size()["height"]
-    #     aspect_ratio = width / height
-    #     closest_index = 0
-    #     min_difference = float('inf')
-
-    #     for index, data in enumerate(character_data):
-    #         diff = abs(aspect_ratio - data['aspect-ratio'])
-    #         if diff < min_difference:
-    #             min_difference = diff
-    #             closest_index = index
-
-    #     selected_characters = (
-    #         character_data[closest_index]['walking']
-    #         if self.movingStatus == "walking"
-    #         else character_data[closest_index]['paused']
-    #     )
-
-    #     if closest_index != self.charIndex and len(selected_characters) > 0:
-    #         if len(selected_characters) == 1:
-    #             c = selected_characters[0]
-    #         else:
-    #             c = random.choice(selected_characters)
-
-    #         if c['char'] != self.displayCharacter.char:
-    #             self.characterUpdated = True 
-    #         self.displayCharacter = CharData(c['char'], c['x'], c['y'], c['s'], c['name'])
-
-    #     self.charIndex = closest_index
 
     def update_pose(self, pose: Pose):
         """
