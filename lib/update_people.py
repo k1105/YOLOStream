@@ -1,6 +1,5 @@
 from classes.person import Person
 from classes.char_data import CharData
-import random
 import json
 
 def load_character_data(filepath: str):
@@ -9,7 +8,7 @@ def load_character_data(filepath: str):
     return data
 
 character_data = load_character_data('json/char_data.json')
-hitomoji_data = load_character_data('json/hitomoji_data.json')
+hitomoji_data = load_character_data('json/250321_hitomoji_data.json')
 
 def update_people(relation, people, bboxes, bbox_buffer, peopleCounts, bufferedBboxCount, min_frames_for_new_person=3, max_frame_age=10, max_lost_frames=3):
     activePersonIds = set([entry['id'] for sublist in relation for entry in sublist])
