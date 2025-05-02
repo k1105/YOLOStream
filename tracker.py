@@ -28,8 +28,21 @@ if arg.video:
     print(f"Loading video from {arg.video}")
     cap = cv2.VideoCapture(arg.video)
 else:
-    print(f"Using webcam (device {arg.camera})")
     cap = cv2.VideoCapture(arg.camera)
+    if not cap.isOpened():
+        print(f"Error: Could not open camera device {arg.camera}")
+        exit(1)
+    
+    # カメラの情報を取得
+    backend = cap.getBackendName()
+    backend_id = cap.get(cv2.CAP_PROP_BACKEND)
+    device_id = cap.get(cv2.CAP_PROP_HW_DEVICE)
+    
+    print(f"Using webcam:")
+    print(f"  - Device number: {arg.camera}")
+    print(f"  - Backend: {backend} (ID: {backend_id})")
+    if device_id != -1:  # -1は情報が取得できない場合
+        print(f"  - Hardware device ID: {device_id}")
 
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
