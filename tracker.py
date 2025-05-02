@@ -16,6 +16,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--mirrored", help="optional", action="store_true")
 parser.add_argument("--gpu", help="Enable YOLO in gpu mode", action="store_true")
 parser.add_argument("--video", type=str, help="Path to input video file (use instead of webcam)")
+parser.add_argument("--camera", type=int, default=0, help="Camera device number (default: 0)")
 arg = parser.parse_args()
 
 # YOLOモデルの読み込み
@@ -27,8 +28,8 @@ if arg.video:
     print(f"Loading video from {arg.video}")
     cap = cv2.VideoCapture(arg.video)
 else:
-    print("Using webcam (device 0)")
-    cap = cv2.VideoCapture(0)
+    print(f"Using webcam (device {arg.camera})")
+    cap = cv2.VideoCapture(arg.camera)
 
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))

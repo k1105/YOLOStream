@@ -3,7 +3,7 @@ import argparse
 import os
 import platform
 
-def run_scripts(address, mirrored, gpu, video):
+def run_scripts(address, mirrored, gpu, video, camera):
 
     if platform.system() == "Windows":        
         venv = os.path.join(os.environ['VIRTUAL_ENV'], 'Scripts', 'python.exe')
@@ -13,7 +13,7 @@ def run_scripts(address, mirrored, gpu, video):
         print(platform.system()+": This is unsupported os.")
 
     # tracker.py を実行時の引数に基づいて実行
-    tracker_cmd = [venv, "tracker.py", "--video", video]
+    tracker_cmd = [venv, "tracker.py", "--video", video, "--camera", str(camera)]
 
     if mirrored:
         tracker_cmd.append("--mirrored")
@@ -40,9 +40,10 @@ if __name__ == "__main__":
     parser.add_argument("--mirrored", help="Enable mirrored mode for tracker", action="store_true")
     parser.add_argument("--gpu", help="Enable YOLO in gpu mode", action="store_true")
     parser.add_argument("--video", help="Path to input video file (use instead of webcam)", default="")
+    parser.add_argument("--camera", help="Camera device number (default: 0)", type=int, default=0)
 
     # 引数をパース
     args = parser.parse_args()
 
     # パースした引数をそれぞれのスクリプトに渡して実行
-    run_scripts(args.address, args.mirrored, args.gpu, args.video)
+    run_scripts(args.address, args.mirrored, args.gpu, args.video, args.camera)
