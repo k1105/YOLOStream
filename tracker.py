@@ -5,7 +5,6 @@ from ultralytics import YOLO
 from lib.relation_calculator import update_relation
 from classes.bbox import Bbox
 from lib.update_people import update_people
-from classes.pose import Pose
 from lib.assign_poses_to_people import assign_poses_to_people
 import pygame
 import os
@@ -43,6 +42,9 @@ else:
     print(f"  - Backend: {backend} (ID: {backend_id})")
     if device_id != -1:  # -1は情報が取得できない場合
         print(f"  - Hardware device ID: {device_id}")
+
+# cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+# cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
 
 width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
